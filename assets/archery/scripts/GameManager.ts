@@ -54,12 +54,10 @@ export class GameManager extends Component {
         this.scoreBoarder.active = false;
         this.targetLabel.string = ""
         this.scoreLabel.string = ""
-        input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
         input.on(Input.EventType.TOUCH_END, this.onMouseUp, this);
     }
 
     protected onDestroy(): void {
-        input.off(Input.EventType.MOUSE_UP, this.onMouseUp, this);
         input.off(Input.EventType.TOUCH_END, this.onMouseUp, this);
     }
 
@@ -74,6 +72,7 @@ export class GameManager extends Component {
         const collider = arrowNode.getComponent(Collider2D)
         const arrowTween = tween(arrowNode).to(this.arrowSpeed, new Vec3(0, 600, 0))
         collider.on(Contact2DType.BEGIN_CONTACT, (selfCollider: Collider2D, otherCollider: Collider2D) => {
+            console.log("arrow collide")
             arrowTween.stop();
             this.onArrowCollide(selfCollider, otherCollider);
             collider.off(Contact2DType.BEGIN_CONTACT)
