@@ -55,10 +55,12 @@ export class GameManager extends Component {
         this.targetLabel.string = ""
         this.scoreLabel.string = ""
         input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+        input.on(Input.EventType.TOUCH_END, this.onMouseUp, this);
     }
 
     protected onDestroy(): void {
         input.off(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+        input.off(Input.EventType.TOUCH_END, this.onMouseUp, this);
     }
 
     onMouseUp(): void {
@@ -68,16 +70,15 @@ export class GameManager extends Component {
         }
         const arrowNode = instantiate(this.arrowPrefab);
         arrowNode.setParent(this.node);
-        arrowNode.setPosition(0, 0, 0);
+        arrowNode.setPosition(0, -400, 0);
         const collider = arrowNode.getComponent(Collider2D)
         const arrowTween = tween(arrowNode).to(this.arrowSpeed, new Vec3(0, 600, 0))
-        console.log("arrowTween", arrowTween, arrowNode)
-        arrowTween.start()
         collider.on(Contact2DType.BEGIN_CONTACT, (selfCollider: Collider2D, otherCollider: Collider2D) => {
+            arrowTween.stop();
             this.onArrowCollide(selfCollider, otherCollider);
             collider.off(Contact2DType.BEGIN_CONTACT)
-            arrowTween.stop();
         }, this)
+        arrowTween.start()
     }
 
     onArrowCollide(selfCollider: Collider2D, otherCollider: Collider2D) {
