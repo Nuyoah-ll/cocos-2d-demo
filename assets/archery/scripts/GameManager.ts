@@ -1,4 +1,4 @@
-import { _decorator, Button, CCFloat, CCInteger, Collider2D, Component, Contact2DType, director, FixedJoint2D, Input, input, instantiate, IPhysics2DContact, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Button, CCFloat, CCInteger, Collider2D, Color, Component, Contact2DType, director, FixedJoint2D, Input, input, instantiate, IPhysics2DContact, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec2, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -93,6 +93,7 @@ export class GameManager extends Component {
                 this.isGameStart = false;
                 this.scoreBoarder.active = true;
                 this.scoreBoarderTitle.string = `你通过了第${this.currentLevel}关`
+                this.scoreBoarderTitle.color = new Color(0, 255, 0, 255)
                 this.scoreBoarderBtn.node.getChildByName("Label").getComponent(Label).string = "下一关";
                 // 成功则增加关卡和目标分数
                 this.currentLevel++;
@@ -104,6 +105,7 @@ export class GameManager extends Component {
             this.isGameStart = false;
             this.scoreBoarder.active = true;
             this.scoreBoarderTitle.string = `你失败了，通过了${this.currentLevel - 1}关`
+            this.scoreBoarderTitle.color = new Color(255, 0, 0, 255);
             this.scoreBoarderBtn.node.getChildByName("Label").getComponent(Label).string = "重新开始";
             // 失败则重置关卡和目标分数
             this.currentLevel = 1;
