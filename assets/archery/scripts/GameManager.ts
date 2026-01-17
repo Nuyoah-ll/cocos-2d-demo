@@ -1,4 +1,4 @@
-import { _decorator, Button, CCFloat, CCInteger, Collider2D, Component, Contact2DType, director, Input, input, instantiate, Label, Node, Prefab, Tween, tween, Vec3 } from 'cc';
+import { _decorator, Button, CCFloat, CCInteger, Collider2D, Component, Contact2DType, director, Input, input, instantiate, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -44,8 +44,12 @@ export class GameManager extends Component {
     currentTargetAngle: number = 0;
     // 初始目标分数
     targetScore: number = 2;
-    // 没通过一关，目标分数增加的数量
+    // 每通过一关，目标分数增加的数量
     scoreIncrement: number = 2;
+    // 初始角速度
+    targetAngularVelocity = 1;
+    // 每通过一关，目标角速度增加的数量
+    angularVelocityIncrement = 1;
     currentScore: number = 0;
     currentLevel: number = 1;
 
@@ -96,6 +100,7 @@ export class GameManager extends Component {
                 // 成功则增加关卡和目标分数
                 this.currentLevel++;
                 this.targetScore += this.scoreIncrement;
+                this.targetAngularVelocity += this.angularVelocityIncrement
             }
         } else {
             // 撞到了其他箭矢，则游戏失败
@@ -148,12 +153,8 @@ export class GameManager extends Component {
         if (!this.isGameStart) {
             return;
         }
-        const angle = deltaTime * this.targetSpeed;
-        let newAngle = this.target.angle + angle;
-        if (newAngle >= 360) {
-            newAngle = newAngle - 360
-        }
-        this.currentTargetAngle = this.target.angle = newAngle;
+        const rigid = this.target.getComponent(RigidBody2D);
+        rigid.angularVelocity = this.targetAngularVelocity
     }
 }
 
