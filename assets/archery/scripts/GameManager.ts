@@ -1,4 +1,4 @@
-import { _decorator, Button, CCFloat, CCInteger, Collider2D, Component, Contact2DType, director, Input, input, instantiate, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec3 } from 'cc';
+import { _decorator, Button, CCFloat, CCInteger, Collider2D, Component, Contact2DType, director, FixedJoint2D, Input, input, instantiate, IPhysics2DContact, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec2, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -47,9 +47,9 @@ export class GameManager extends Component {
     // 每通过一关，目标分数增加的数量
     scoreIncrement: number = 2;
     // 初始角速度
-    targetAngularVelocity = 1;
+    targetAngularVelocity = 0.5;
     // 每通过一关，目标角速度增加的数量
-    angularVelocityIncrement = 1;
+    angularVelocityIncrement = 0.2;
     currentScore: number = 0;
     currentLevel: number = 1;
 
@@ -71,25 +71,21 @@ export class GameManager extends Component {
             return;
         }
         const arrowNode = instantiate(this.arrowPrefab);
-        arrowNode.setParent(this.node);
+        arrowNode.setParent(this.node)
         arrowNode.setPosition(0, -400, 0);
         const collider = arrowNode.getComponent(Collider2D)
-        const arrowTween = tween(arrowNode).to(this.arrowSpeed, new Vec3(0, 600, 0))
-        collider.on(Contact2DType.BEGIN_CONTACT, (selfCollider: Collider2D, otherCollider: Collider2D) => {
-            console.log("arrow collide")
-            arrowTween.stop();
-            this.onArrowCollide(selfCollider, otherCollider);
+        const rigid = arrowNode.getComponent(RigidBody2D)
+        rigid.linearVelocity = new Vec2(0, 400)
+        collider.on(Contact2DType.BEGIN_CONTACT, (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact) => {
+            this.onArrowCollide(selfCollider, otherCollider, contact);
             collider.off(Contact2DType.BEGIN_CONTACT)
         }, this)
-        arrowTween.start()
     }
 
-    onArrowCollide(selfCollider: Collider2D, otherCollider: Collider2D) {
-        const arrowNode = selfCollider.node;
-        // 无论箭是撞到了靶子还是其他箭矢，都需要将箭粘住靶子，方便后续重新开始时清楚箭矢
-        this.attachArrowToTarget(arrowNode);
-        // 如果箭矢撞到了靶子，则计分+1
+    onArrowCollide(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact) {
+        // 如果箭矢撞到了靶子，则计分+1，且将箭固定到靶子上
         if (otherCollider.node === this.target) {
+            this.attachArrowToTarget(selfCollider, otherCollider, contact);
             this.currentScore++;
             this.scoreLabel.string = `当前射中${this.currentScore}把箭`
             if (this.currentScore >= this.targetScore) {
@@ -111,18 +107,24 @@ export class GameManager extends Component {
             // 失败则重置关卡和目标分数
             this.currentLevel = 1;
             this.targetScore = 2;
+            this.targetAngularVelocity = 0.5
         }
     }
 
-    attachArrowToTarget(arrowNode: Node) {
-        // 获取靶子箭的世界坐标
-        const arrowWorldPos = arrowNode.getWorldPosition();
-        // 将箭设置为靶子的子节点，此时箭的世界坐标会发生变化
-        arrowNode.setParent(this.target)
-        // 重新设置箭的世界坐标，保持和之前相同
-        arrowNode.setWorldPosition(arrowWorldPos)
-        // 将箭的旋转角度设置为靶子的角度的相反数，防止箭在粘住靶子时歪了
-        arrowNode.angle = -this.currentTargetAngle;
+    attachArrowToTarget(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact) {
+        const arrowNode = selfCollider.node
+        const arrowRigid = arrowNode.getComponent(RigidBody2D)
+        const otherNode = otherCollider.node
+        const targetRigid = otherNode.getComponent(RigidBody2D)
+        const fixedJoint = arrowNode.addComponent(FixedJoint2D)
+        fixedJoint.connectedBody = targetRigid
+        const worldPoint = contact.getWorldManifold().points[0]
+        const arrowLoc = arrowRigid.getLocalPoint(worldPoint, new Vec2())
+        const targetLoc = targetRigid.getLocalPoint(worldPoint, new Vec2())
+        fixedJoint.anchor = arrowLoc;
+        fixedJoint.connectedAnchor = targetLoc
+        // 碰撞之后防止固定节点抖动
+        fixedJoint.dampingRatio = 10000
     }
 
     onStartBtnClick(): void {
@@ -143,10 +145,16 @@ export class GameManager extends Component {
         this.levelLabel.string = `第${this.currentLevel}关`
         this.targetLabel.string = `目标：射中${this.targetScore}把箭`;
         this.scoreLabel.string = `当前射中${this.currentScore}把箭`
-        this.node.getChildByName("Target").removeAllChildren();
+        this.removeAllArrow()
         setTimeout(() => {
             this.isGameStart = true;
         }, 100);
+    }
+
+    removeAllArrow() {
+        for (let arrow of this.node.children.filter(child => child.name === "Arrow")) {
+            arrow.destroy();
+        }
     }
 
     update(deltaTime: number) {
