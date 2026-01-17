@@ -58,6 +58,7 @@ export class GameManager extends Component {
         this.scoreBoarder.active = false;
         this.targetLabel.string = ""
         this.scoreLabel.string = ""
+        this.levelLabel.string = ""
         input.on(Input.EventType.TOUCH_END, this.onMouseUp, this);
     }
 
@@ -71,7 +72,7 @@ export class GameManager extends Component {
             return;
         }
         const arrowNode = instantiate(this.arrowPrefab);
-        arrowNode.setParent(this.node)
+        arrowNode.setParent(this.target.parent)
         arrowNode.setPosition(0, -400, 0);
         const collider = arrowNode.getComponent(Collider2D)
         const rigid = arrowNode.getComponent(RigidBody2D)
@@ -152,7 +153,7 @@ export class GameManager extends Component {
     }
 
     removeAllArrow() {
-        for (let arrow of this.node.children.filter(child => child.name === "Arrow")) {
+        for (let arrow of this.target.parent.children.filter(child => child.name === "Arrow")) {
             arrow.destroy();
         }
     }
