@@ -47,9 +47,9 @@ export class GameManager extends Component {
     // 每通过一关，目标分数增加的数量
     scoreIncrement: number = 2;
     // 初始角速度
-    targetAngularVelocity = 0.5;
+    targetAngularVelocity = 1;
     // 每通过一关，目标角速度增加的数量
-    angularVelocityIncrement = 0.2;
+    angularVelocityIncrement = 0.3;
     currentScore: number = 0;
     currentLevel: number = 1;
 
@@ -110,7 +110,7 @@ export class GameManager extends Component {
             // 失败则重置关卡和目标分数
             this.currentLevel = 1;
             this.targetScore = 2;
-            this.targetAngularVelocity = 0.5
+            this.targetAngularVelocity = 1
         }
     }
 
@@ -118,16 +118,18 @@ export class GameManager extends Component {
         const arrowNode = selfCollider.node
         const arrowRigid = arrowNode.getComponent(RigidBody2D)
         const otherNode = otherCollider.node
-        const targetRigid = otherNode.getComponent(RigidBody2D)
+        const otherRigid = otherNode.getComponent(RigidBody2D)
         const fixedJoint = arrowNode.addComponent(FixedJoint2D)
-        fixedJoint.connectedBody = targetRigid
+        fixedJoint.connectedBody = otherRigid
         const worldPoint = contact.getWorldManifold().points[0]
         const arrowLoc = arrowRigid.getLocalPoint(worldPoint, new Vec2())
-        const targetLoc = targetRigid.getLocalPoint(worldPoint, new Vec2())
+        const targetLoc = otherRigid.getLocalPoint(worldPoint, new Vec2())
         fixedJoint.anchor = arrowLoc;
         fixedJoint.connectedAnchor = targetLoc
         // 碰撞之后防止固定节点抖动
-        fixedJoint.dampingRatio = 10000
+        fixedJoint.dampingRatio = 1000000
+        // 箭射到靶子上后，因为头部和尾部角速度不一致，会导致箭的角度发生变化
+        arrowRigid.angularDamping = 1000000
     }
 
     onStartBtnClick(): void {
