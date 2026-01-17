@@ -124,12 +124,10 @@ export class GameManager extends Component {
         const worldPoint = contact.getWorldManifold().points[0]
         const arrowLoc = arrowRigid.getLocalPoint(worldPoint, new Vec2())
         const targetLoc = otherRigid.getLocalPoint(worldPoint, new Vec2())
-        fixedJoint.anchor = arrowLoc;
+        fixedJoint.anchor = new Vec2(arrowLoc.x, arrowLoc.y - 10); // -10是避免两个节点重合，然后在靶子转动的过程中，使得箭矢头部和尾部产生不一致的角速度
         fixedJoint.connectedAnchor = targetLoc
         // 碰撞之后防止固定节点抖动
-        fixedJoint.dampingRatio = 1000000
-        // 箭射到靶子上后，因为头部和尾部角速度不一致，会导致箭的角度发生变化
-        arrowRigid.angularDamping = 1000000
+        fixedJoint.dampingRatio = 100000
     }
 
     onStartBtnClick(): void {
