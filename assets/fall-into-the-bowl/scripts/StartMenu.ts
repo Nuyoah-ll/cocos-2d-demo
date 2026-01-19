@@ -19,5 +19,13 @@ export class StartMenu extends UIBase {
         const node = this.startGameButton?.children?.[0]
         node && tween(node).repeatForever(tween().to(0.5, { angle: 10 }).to(0.5, { angle: 0 })).start()
     }
+
+    onStartButtonClick() {
+        console.log("开始游戏按钮点击");
+    }
+
+    onLevelSelectButtonClick() {
+        console.log("关卡选择按钮点击");
+    }
 }
 
