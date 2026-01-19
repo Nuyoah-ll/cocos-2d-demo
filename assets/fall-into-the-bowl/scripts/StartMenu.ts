@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, tween } from 'cc';
 import { UIBase } from './UIBase';
+import { StaticSingleton } from './StaticSingleton';
 const { ccclass, property } = _decorator;
 
 @ccclass('StartMenu')
@@ -21,11 +22,11 @@ export class StartMenu extends UIBase {
     }
 
     onStartButtonClick() {
-        console.log("开始游戏按钮点击");
+        StaticSingleton.UIManager.gameStart();
     }
 
     onLevelSelectButtonClick() {
-        console.log("关卡选择按钮点击");
+        StaticSingleton.UIManager.toLevelSelectScene();
     }
 }
 

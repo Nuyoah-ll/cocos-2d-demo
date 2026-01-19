@@ -20,5 +20,13 @@ export class UIManager extends Component {
     update(deltaTime: number) {
 
     }
+
+    gameStart() {
+        console.log("游戏开始");
+    }
+
+    toLevelSelectScene() {
+        console.log("切换到关卡选择场景");
+    }
 }
 
