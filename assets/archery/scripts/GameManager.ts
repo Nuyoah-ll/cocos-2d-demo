@@ -1,4 +1,5 @@
-import { _decorator, Button, CCFloat, CCInteger, Collider2D, Color, Component, Contact2DType, director, FixedJoint2D, Input, input, instantiate, IPhysics2DContact, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, AudioClip, Button, CCFloat, CCInteger, Collider2D, Color, Component, Contact2DType, director, FixedJoint2D, Input, input, instantiate, IPhysics2DContact, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec2, Vec3 } from 'cc';
+import { AudioMgr } from './AudioMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -40,6 +41,15 @@ export class GameManager extends Component {
     @property(CCInteger)
     targetSpeed: number = 100;
 
+    @property(AudioClip)
+    successAudioClip: AudioClip = null;
+
+    @property(AudioClip)
+    failAudioClip: AudioClip = null;
+
+    @property(AudioClip)
+    arrowCollideAudioClip: AudioClip = null;
+
     isGameStart: boolean = false;
     currentTargetAngle: number = 0;
     // 初始目标分数
@@ -78,6 +88,7 @@ export class GameManager extends Component {
         const rigid = arrowNode.getComponent(RigidBody2D)
         rigid.linearVelocity = new Vec2(0, 400)
         collider.on(Contact2DType.BEGIN_CONTACT, (selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact) => {
+            AudioMgr.inst.playOneShot(this.arrowCollideAudioClip);
             this.onArrowCollide(selfCollider, otherCollider, contact);
             collider.off(Contact2DType.BEGIN_CONTACT)
         }, this)
@@ -90,6 +101,7 @@ export class GameManager extends Component {
             this.currentScore++;
             this.scoreLabel.string = `当前射中${this.currentScore}把箭`
             if (this.currentScore >= this.targetScore) {
+                AudioMgr.inst.playOneShot(this.successAudioClip);
                 this.isGameStart = false;
                 this.scoreBoarder.active = true;
                 this.scoreBoarderTitle.string = `你通过了第${this.currentLevel}关`
@@ -101,6 +113,7 @@ export class GameManager extends Component {
                 this.targetAngularVelocity += this.angularVelocityIncrement
             }
         } else {
+            AudioMgr.inst.playOneShot(this.failAudioClip);
             // 撞到了其他箭矢，则游戏失败
             this.isGameStart = false;
             this.scoreBoarder.active = true;

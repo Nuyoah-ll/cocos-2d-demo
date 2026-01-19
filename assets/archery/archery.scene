@@ -3071,6 +3071,18 @@
     },
     "arrowSpeed": 0.3,
     "targetSpeed": 100,
+    "successAudioClip": {
+      "__uuid__": "498942ba-c621-4f4d-8941-0b1428f2c54f",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "failAudioClip": {
+      "__uuid__": "50b11e89-f278-4263-9df6-0c78e5c92bea",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "arrowCollideAudioClip": {
+      "__uuid__": "c01aae7d-f3cf-44fb-aa2d-8a8d9f09e626",
+      "__expectedType__": "cc.AudioClip"
+    },
     "_id": "a7vsWFaPdJf6rjTtqshMpB"
   },
   {
