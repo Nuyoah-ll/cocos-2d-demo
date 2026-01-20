@@ -552,6 +552,10 @@
       "__uuid__": "020991bb-d483-4606-a6e4-e6712ce974b7",
       "__expectedType__": "cc.Prefab"
     },
+    "levelSelectPrefab": {
+      "__uuid__": "f0ae97bd-2c3d-4c19-85b7-b0592bebb439",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": "f3sPCtSBJOdawIxr7ng1jp"
   },
   {
