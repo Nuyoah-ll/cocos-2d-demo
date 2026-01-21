@@ -4,6 +4,7 @@ import { UIType } from './Constant';
 import { UIBase } from './UIBase';
 import { StartMenu } from './StartMenu';
 import { LevelSelect } from './LevelSelect';
+import { ControlPane } from './ControlPane';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIManager')
@@ -12,6 +13,8 @@ export class UIManager extends Component {
     startMenuPrefab: Prefab | null = null;
     @property(Prefab)
     levelSelectPrefab: Prefab | null = null;
+    @property(Prefab)
+    controlPanePrefab: Prefab | null = null;
 
     uiMap: Map<UIType, UIBase> = new Map();
 
@@ -19,6 +22,7 @@ export class UIManager extends Component {
         StaticSingleton.setUIManager(this);
         this.initStartMenu();
         this.initLevelSelect();
+        this.initControlPane();
     }
 
     start() {
@@ -41,6 +45,12 @@ export class UIManager extends Component {
         this.uiMap.set(UIType.LevelSelect, levelSelectNode.getComponent(LevelSelect))
     }
 
+    initControlPane() {
+        const controlPaneNode = instantiate(this.controlPanePrefab);
+        controlPaneNode.parent = this.node;
+        this.uiMap.set(UIType.ControlPane, controlPaneNode.getComponent(ControlPane))
+    }
+
     changeUI(types: UIType[]) {
         console.log(types);
         this.uiMap.forEach((node, uiType) => {
@@ -55,6 +65,7 @@ export class UIManager extends Component {
 
     gameStart() {
         console.log("游戏开始");
+        this.changeUI([UIType.ControlPane]);
     }
 
     toLevelSelectScene() {

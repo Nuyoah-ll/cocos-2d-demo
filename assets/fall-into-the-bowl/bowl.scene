@@ -556,6 +556,10 @@
       "__uuid__": "f0ae97bd-2c3d-4c19-85b7-b0592bebb439",
       "__expectedType__": "cc.Prefab"
     },
+    "controlPanePrefab": {
+      "__uuid__": "159437d1-5dde-43fd-bf30-364903efaca4",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": "f3sPCtSBJOdawIxr7ng1jp"
   },
   {
