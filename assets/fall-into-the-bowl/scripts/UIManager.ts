@@ -112,5 +112,11 @@ export class UIManager extends Component {
     backToStartMenu() {
         this.changeUI([UIType.StartMenu]);
     }
+
+    updateGameInfo(level: number, count: number, totalCount: number) {
+        const gameInfo = this.uiMap.get(UIType.GameInfo) as GameInfo;
+        gameInfo.changeLevel(level);
+        gameInfo.changeCount(count, totalCount);
+    }
 }
 

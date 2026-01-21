@@ -26,29 +26,31 @@ export const CONTROL_PANE_MAX_RADIUS = 130
 
 export const FOOD_MOVE_SPEED = 300 // 食物移动速度，单位px/s
 
+export const CHECK_FOOD_STATE_INTERVAL = 0.1 // 检测食物状态的时间间隔，单位s
+
 export const levelsInfo: LevelInfo[] = [
   {
-    foodCount: 2,
+    foodCount: 4,
     foodType: FoodType.ChickenWing
   },
   {
-    foodCount: 2,
+    foodCount: 5,
     foodType: FoodType.Omelette
   },
   {
-    foodCount: 3,
+    foodCount: 6,
     foodType: FoodType.Cake
   },
   {
-    foodCount: 3,
+    foodCount: 7,
     foodType: FoodType.Zongzi
   },
   {
-    foodCount: 4,
+    foodCount: 8,
     foodType: FoodType.Chips
   },
   {
-    foodCount: 4,
+    foodCount: 9,
     foodType: FoodType.Hamburger
   }
 ]

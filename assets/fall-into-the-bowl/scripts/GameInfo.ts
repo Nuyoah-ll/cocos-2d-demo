@@ -12,8 +12,8 @@ export class GameInfo extends UIBase {
         this.node.children[0].getComponent(Label).string = `第${level}关`;
     }
 
-    changeFinishedCount(count: number) {
-        this.node.children[1].getComponent(Label).string = `已完成: ${count}`;
+    changeCount(count: number, totalCount: number) {
+        this.node.children[1].getComponent(Label).string = `已完成: ${count}/${totalCount}`;
     }
 }
 
