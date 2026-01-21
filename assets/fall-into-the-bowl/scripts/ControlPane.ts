@@ -1,6 +1,8 @@
-import { _decorator, Component, EventTouch, misc, Node, UIComponent, UITransform, Vec3 } from 'cc';
+import { _decorator, Component, EventTouch, misc, Node, SimplexCollider, UIComponent, UITransform, Vec3 } from 'cc';
 import { UIBase } from './UIBase';
-import { CONTROL_PANE_MAX_RADIUS } from './Constant';
+import { CONTROL_PANE_MAX_RADIUS, Direction } from './Constant';
+import { StaticSingleton } from './StaticSingleton';
+import { bindTouchEvent } from './Util';
 const { ccclass, property } = _decorator;
 
 @ccclass('ControlPane')
@@ -23,16 +25,43 @@ export class ControlPane extends UIBase {
     onLoad() {
         super.onLoad();
         this.addEventListenersForMidCircleButton();
+        this.addEventListenersForLeftButton();
+        this.addEventListenersForRightButton();
+        this.addEventListenersForDownButton();
     }
 
     addEventListenersForMidCircleButton() {
-        this.midCicleButtonBackground.on(Node.EventType.TOUCH_START, this.midCircleButtonTouchStart, this);
-        this.midCicleButtonBackground.on(Node.EventType.TOUCH_MOVE, this.midCircleButtonTouchMove, this);
-        this.midCicleButtonBackground.on(Node.EventType.TOUCH_END, this.midCircleButtonTouchEnd, this);
-        this.midCicleButtonBackground.on(Node.EventType.TOUCH_CANCEL, this.midCircleButtonTouchEnd, this);
+        bindTouchEvent(this.midCicleButtonBackground, {
+            start: this.changeMidCircleButtonPositionAndRotateFood,
+            move: this.changeMidCircleButtonPositionAndRotateFood,
+            end: this.resetMidCircleButtonPosition,
+            cancel: this.resetMidCircleButtonPosition,
+        }, this, false)
     }
 
-    midCircleButtonTouchStart(event: EventTouch) {
+    addEventListenersForLeftButton() {
+        bindTouchEvent(this.leftButton, {
+            start: this.moveFoodToLeft,
+            end: this.cancelMoveFood,
+            cancel: this.cancelMoveFood,
+        }, this)
+    }
+
+    addEventListenersForRightButton() {
+        bindTouchEvent(this.rightButton, {
+            start: this.moveFoodToRight,
+            end: this.cancelMoveFood,
+            cancel: this.cancelMoveFood,
+        }, this)
+    }
+
+    addEventListenersForDownButton() {
+        bindTouchEvent(this.downButton, {
+            end: this.dropFood,
+        }, this)
+    }
+
+    changeMidCircleButtonPositionAndRotateFood(event: EventTouch) {
         // 获取触点的世界坐标
         const worldPostion = event.getUILocation();
         // 获取该世界坐标在midCicleButtonBackground节点UI布局下的本地坐标
@@ -41,15 +70,11 @@ export class ControlPane extends UIBase {
         this.midCircleButton.setPosition(this.getlimitedMidButtonPosition(locPosition))
         const angle = misc.radiansToDegrees(Math.atan2(this.midCircleButton.y, this.midCircleButton.x))
         // todo 将食物旋转angle角度
-        console.log("将食物旋转:", angle)
+        StaticSingleton.GameManager.rotateFood(angle);
 
     }
 
-    midCircleButtonTouchMove(event) {
-        this.midCircleButtonTouchStart(event)
-    }
-
-    midCircleButtonTouchEnd(event) {
+    resetMidCircleButtonPosition(event) {
         this.midCircleButton.setPosition(new Vec3())
     }
 
@@ -64,16 +89,24 @@ export class ControlPane extends UIBase {
         }
     }
 
-    onLefetButtonClick() {
-        console.log('Left button clicked');
+    moveFoodToLeft() {
+        console.log('向左移动食物');
+        StaticSingleton.GameManager.direction = Direction.Left;
     }
 
-    onRightButtonClick() {
-        console.log('Right button clicked');
+    moveFoodToRight() {
+        console.log('向右移动食物');
+        StaticSingleton.GameManager.direction = Direction.Right;
     }
 
-    onDownButtonClick() {
-        console.log('Down button clicked');
+    cancelMoveFood() {
+        console.log('停止移动食物');
+        StaticSingleton.GameManager.direction = Direction.KeppStatic;
+    }
+
+    dropFood() {
+        console.log('丢下食物');
+        StaticSingleton.GameManager.dropFood();
     }
 }
 
