@@ -1,5 +1,5 @@
 import { _decorator, AudioClip, Button, CCFloat, CCInteger, Collider2D, Color, Component, Contact2DType, director, FixedJoint2D, Input, input, instantiate, IPhysics2DContact, Label, Node, Prefab, RigidBody2D, Tween, tween, Vec2, Vec3 } from 'cc';
-import { AudioMgr } from '../../common/AudioMgr';
+import { AudioMgr } from '../../../common/AudioMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
