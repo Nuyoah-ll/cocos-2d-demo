@@ -1,8 +1,9 @@
 import { _decorator, Component, Node, Prefab, instantiate, RigidBody2D, Collider2D, ERigidBody2DType, Vec2 } from 'cc';
 import { StaticSingleton } from './StaticSingleton';
-import { CHECK_FOOD_STATE_INTERVAL, Direction, FOOD_MOVE_SPEED, levelsInfo } from './Constant';
+import { AudioPath, CHECK_FOOD_STATE_INTERVAL, Direction, FOOD_MOVE_SPEED, levelsInfo } from './Constant';
 import { PhysicsManager } from './PhysicsManager';
 import { LevelInfo } from './Type';
+import { AudioMgr } from '../../../common/AudioMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -33,6 +34,7 @@ export class GameManager extends Component {
 
     protected onLoad(): void {
         StaticSingleton.setGameManager(this);
+        AudioMgr.inst.play(AudioPath.BgMusic);
     }
 
     gameStart(level?: number) {
