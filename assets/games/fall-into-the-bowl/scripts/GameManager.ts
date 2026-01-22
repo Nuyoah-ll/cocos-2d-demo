@@ -34,6 +34,7 @@ export class GameManager extends Component {
 
     protected onLoad(): void {
         StaticSingleton.setGameManager(this);
+        console.log("GameManager onLoad", AudioPath.BgMusic);
         AudioMgr.inst.play(AudioPath.BgMusic);
     }
 
