@@ -1,6 +1,7 @@
 import { _decorator, Label, Node } from 'cc';
 import { UIBase } from './UIBase';
 import { StaticSingleton } from './StaticSingleton';
+import { bindTouchEvent } from './Util';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelSelect')
@@ -10,10 +11,13 @@ export class LevelSelect extends UIBase {
 
     protected onLoad(): void {
         super.onLoad();
+        this.addEventListenerForButton()
     }
 
-    onBackToStartMenuButtonClick() {
-        StaticSingleton.GameManager.backToStartMenu();
+    addEventListenerForButton() {
+        bindTouchEvent(this.backToStartMenuButton, {
+            end: () => StaticSingleton.GameManager.backToStartMenu()
+        }, this)
     }
 
     updateLevelItem() {
