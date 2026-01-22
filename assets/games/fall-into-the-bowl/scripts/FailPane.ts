@@ -1,20 +1,24 @@
 import { _decorator, Component, Node } from 'cc';
 import { UIBase } from './UIBase';
 import { StaticSingleton } from './StaticSingleton';
-const { ccclass, property } = _decorator;
+import { bindTouchEvent } from './Util';
+const { ccclass } = _decorator;
 
 @ccclass('FailPane')
 export class FailPane extends UIBase {
     protected onLoad(): void {
         super.onLoad();
+        this.addEventListenerForButton()
     }
 
-    onBackToHome() {
-        StaticSingleton.GameManager.backToStartMenu();
-    }
-
-    onRestartThisLevel() {
-        StaticSingleton.GameManager.restartThisLevel();
+    addEventListenerForButton() {
+        const [backToHomeButton, retryButton] = this.node.children[1].children;
+        bindTouchEvent(backToHomeButton, {
+            end: () => StaticSingleton.GameManager.backToStartMenu()
+        }, this)
+        bindTouchEvent(retryButton, {
+            end: () => StaticSingleton.GameManager.restartThisLevel()
+        }, this)
     }
 }
 
