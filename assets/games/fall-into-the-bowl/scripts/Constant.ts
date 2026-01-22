@@ -19,9 +19,16 @@ export enum FoodType {
 }
 
 export enum Direction {
-  KeppStatic,
+  KeepStatic,
   Left,
   Right
+}
+
+export enum AudioPath {
+  BgMusic = "fall-into-the-bowl/audio/musicBgm.mp3",
+  Click = "fall-into-the-bowl/audio/musicClick.mp3",
+  Loss = "fall-into-the-bowl/audio/musicLoss.mp3",
+  Win = "fall-into-the-bowl/audio/musicWin.mp3",
 }
 
 export const CONTROL_PANE_MAX_RADIUS = 130

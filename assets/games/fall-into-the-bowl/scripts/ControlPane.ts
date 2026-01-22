@@ -101,7 +101,7 @@ export class ControlPane extends UIBase {
 
     cancelMoveFood() {
         console.log('停止移动食物');
-        StaticSingleton.GameManager.direction = Direction.KeppStatic;
+        StaticSingleton.GameManager.direction = Direction.KeepStatic;
     }
 
     dropFood() {
