@@ -130,8 +130,12 @@ export class GameManager extends Component {
                 return
             }
             this.createFood(this.currentLevel);
-        } else {
-            console.log('食物未静止');
+            return
+        }
+        const isAnyFoodOut = this.node.children.some(item => item.position.y <= -800)
+        if (isAnyFoodOut) {
+            this.showFailPane();
+            return
         }
     }
 
