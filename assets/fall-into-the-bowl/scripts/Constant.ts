@@ -5,6 +5,8 @@ export enum UIType {
   LevelSelect,
   ControlPane,
   GameInfo,
+  PassPane,
+  FailPane
 }
 
 export enum FoodType {

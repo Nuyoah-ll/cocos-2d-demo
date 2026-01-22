@@ -679,6 +679,14 @@
       "__uuid__": "159437d1-5dde-43fd-bf30-364903efaca4",
       "__expectedType__": "cc.Prefab"
     },
+    "passPanePrefab": {
+      "__uuid__": "161a9d3c-fe33-4bf1-b2e0-20cb640b2cf9",
+      "__expectedType__": "cc.Prefab"
+    },
+    "failPanePrefab": {
+      "__uuid__": "538d5e00-3c1a-4402-bcdd-efbc34863975",
+      "__expectedType__": "cc.Prefab"
+    },
     "gameInfoPrefab": {
       "__uuid__": "f229bc58-c651-49da-94cc-77884e1b3013",
       "__expectedType__": "cc.Prefab"

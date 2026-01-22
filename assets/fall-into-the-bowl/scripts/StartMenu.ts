@@ -22,11 +22,11 @@ export class StartMenu extends UIBase {
     }
 
     onStartButtonClick() {
-        StaticSingleton.UIManager.gameStart();
+        StaticSingleton.GameManager.gameStart();
     }
 
     onLevelSelectButtonClick() {
-        StaticSingleton.UIManager.toLevelSelectScene();
+        StaticSingleton.GameManager.toLevelSelectScene();
     }
 }
 

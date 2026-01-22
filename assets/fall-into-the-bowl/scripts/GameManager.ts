@@ -18,7 +18,7 @@ export class GameManager extends Component {
     currentLevelInfo: LevelInfo | null = null;
     // 最高通关关卡
     maxSuccessLevel: number = 0;
-    // 是否开始游戏了
+    // 是否正在玩游戏
     isPlaying: boolean = false;
     // 当前控制的食物
     currentFoodNode: Node | null = null;
@@ -26,6 +26,8 @@ export class GameManager extends Component {
     isFoodDropping: boolean = false;
     // 食物的移动方向
     direction: Direction = Direction.KeppStatic;
+    // 已经掉到碗里的食物数量
+    finishedFoodCount: number = 0;
     // 状态检测计时器
     stateCheckTimer: number = 0;
 
@@ -34,13 +36,52 @@ export class GameManager extends Component {
     }
 
     gameStart(level?: number) {
+        this.node.removeAllChildren();
         level = level || (this.maxSuccessLevel === levelsInfo.length ? 1 : this.maxSuccessLevel + 1);
         this.createBowl()
         this.createFood(level)
         this.currentLevel = level;
         this.currentLevelInfo = levelsInfo[level - 1];
-        StaticSingleton.UIManager.updateGameInfo(level, 1, this.currentLevelInfo.foodCount); // 更新游戏信息UI
         this.isPlaying = true;
+        StaticSingleton.UIManager.gameStart();
+        StaticSingleton.UIManager.updateGameInfo(level, 0, this.currentLevelInfo.foodCount); // 更新游戏信息UI
+    }
+
+    gameEnd() {
+        this.node.removeAllChildren();
+        this.isPlaying = false;
+        this.currentFoodNode = null
+        this.isFoodDropping = false;
+        this.stateCheckTimer = 0;
+        this.finishedFoodCount = 0
+        this.direction = Direction.KeppStatic;
+    }
+
+    showPassPane() {
+        this.gameEnd();
+        StaticSingleton.UIManager.showPassPane();
+    }
+
+    showFailPane() {
+        this.gameEnd();
+        StaticSingleton.UIManager.showFailPane();
+    }
+
+    backToStartMenu() {
+        this.gameEnd();
+        StaticSingleton.UIManager.backToStartMenu();
+    }
+
+    toNextLevel() {
+        this.gameStart(this.currentLevel + 1);
+    }
+
+    restartThisLevel() {
+        this.gameStart(this.currentLevel);
+    }
+
+    toLevelSelectScene() {
+        StaticSingleton.UIManager.toLevelSelectScene();
     }
 
     createBowl() {
@@ -76,9 +117,19 @@ export class GameManager extends Component {
         this.isFoodDropping = true;
     }
 
-    checkFoodStatus() {
-        if (PhysicsManager.isStatic(this.currentFoodNode)) {
+    checkGameState() {
+        const isALLFoodStatic = this.node.children.every(PhysicsManager.isStatic);
+        if (isALLFoodStatic) {
             console.log('食物静止，准备生成下一个食物');
+            this.finishedFoodCount++;
+            this.isFoodDropping = false;
+            StaticSingleton.UIManager.updateGameInfo(this.currentLevel, this.finishedFoodCount, this.currentLevelInfo.foodCount); // 更新游戏信息UI
+            if (this.finishedFoodCount === this.currentLevelInfo.foodCount) {
+                this.showPassPane();
+                this.maxSuccessLevel = Math.max(this.maxSuccessLevel, this.currentLevel);
+                return
+            }
+            this.createFood(this.currentLevel);
         } else {
             console.log('食物未静止');
         }
@@ -89,7 +140,7 @@ export class GameManager extends Component {
             if (this.isFoodDropping) {
                 this.stateCheckTimer += deltaTime;
                 if (this.stateCheckTimer >= CHECK_FOOD_STATE_INTERVAL) {
-                    this.checkFoodStatus()
+                    this.checkGameState()
                     this.stateCheckTimer = 0;
                 }
             }
@@ -99,7 +150,6 @@ export class GameManager extends Component {
                 this.moveFood(FOOD_MOVE_SPEED * deltaTime);
             }
         }
-
     }
 }
 

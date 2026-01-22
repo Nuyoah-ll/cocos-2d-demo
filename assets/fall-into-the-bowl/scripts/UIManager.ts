@@ -8,6 +8,8 @@ import { ControlPane } from './ControlPane';
 import { bindTouchEvent } from './Util';
 import { LevelInfo } from './Type';
 import { GameInfo } from './GameInfo';
+import { PassPane } from './PassPane';
+import { FailPane } from './FailPane';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIManager')
@@ -20,6 +22,10 @@ export class UIManager extends Component {
     levelItemPrefab: Prefab | null = null;
     @property(Prefab)
     controlPanePrefab: Prefab | null = null;
+    @property(Prefab)
+    passPanePrefab: Prefab | null = null;
+    @property(Prefab)
+    failPanePrefab: Prefab | null = null;
 
     @property(Prefab)
     gameInfoPrefab: Prefab | null = null;
@@ -32,6 +38,8 @@ export class UIManager extends Component {
         this.initLevelSelect();
         this.initControlPane();
         this.initGameInfo();
+        this.initPassPane();
+        this.initFailPane();
     }
 
     start() {
@@ -59,16 +67,16 @@ export class UIManager extends Component {
         console.log("初始化关卡项:", levelInfo, index);
         const levelItemNode = instantiate(this.levelItemPrefab);
         const foodNode = instantiate(StaticSingleton.GameManager.foodsPrefabs[index])
-        const [levelInfoNode, isUnlockLoabel] = levelItemNode.children;
+        const [levelInfoNode, isUnlockLabel] = levelItemNode.children;
         bindTouchEvent(levelInfoNode, {
             end: (e) => {
                 this.changeUI([UIType.ControlPane, UIType.GameInfo]);
                 StaticSingleton.GameManager.gameStart(index + 1);
             }
         })
-        isUnlockLoabel.getComponent(Label).string = StaticSingleton.GameManager.maxSuccessLevel >= index + 1 ? "已解锁" : "未解锁";
-        const [levelLabal, levelFood] = levelInfoNode.children;
-        levelLabal.getComponent(Label).string = `${index + 1}`;
+        isUnlockLabel.getComponent(Label).string = StaticSingleton.GameManager.maxSuccessLevel >= index + 1 ? "已解锁" : "未解锁";
+        const [levelLabel, levelFood] = levelInfoNode.children;
+        levelLabel.getComponent(Label).string = `${index + 1}`;
         const [foodCount, food] = levelFood.children;
         food.removeFromParent();
         foodCount.getComponent(Label).string = `${levelInfo.foodCount}X`;
@@ -88,6 +96,18 @@ export class UIManager extends Component {
         this.uiMap.set(UIType.GameInfo, gameInfoNode.getComponent(GameInfo))
     }
 
+    initPassPane() {
+        const passPaneNode = instantiate(this.passPanePrefab);
+        passPaneNode.parent = this.node;
+        this.uiMap.set(UIType.PassPane, passPaneNode.getComponent(PassPane))
+    }
+
+    initFailPane() {
+        const failPaneNode = instantiate(this.failPanePrefab);
+        failPaneNode.parent = this.node;
+        this.uiMap.set(UIType.FailPane, failPaneNode.getComponent(FailPane))
+    }
+
     changeUI(types: UIType[]) {
         console.log(types);
         this.uiMap.forEach((node, uiType) => {
@@ -102,11 +122,11 @@ export class UIManager extends Component {
 
     gameStart() {
         this.changeUI([UIType.ControlPane, UIType.GameInfo]);
-        StaticSingleton.GameManager.gameStart();
     }
 
     toLevelSelectScene() {
         this.changeUI([UIType.LevelSelect]);
+        this.updateLevelItem();
     }
 
     backToStartMenu() {
@@ -117,6 +137,18 @@ export class UIManager extends Component {
         const gameInfo = this.uiMap.get(UIType.GameInfo) as GameInfo;
         gameInfo.changeLevel(level);
         gameInfo.changeCount(count, totalCount);
+    }
+
+    showPassPane() {
+        this.changeUI([UIType.PassPane, UIType.ControlPane, UIType.GameInfo]);
+    }
+
+    showFailPane() {
+        this.changeUI([UIType.FailPane, UIType.ControlPane, UIType.GameInfo]);
+    }
+
+    updateLevelItem() {
+        (this.uiMap.get(UIType.LevelSelect) as LevelSelect).updateLevelItem();
     }
 }
 

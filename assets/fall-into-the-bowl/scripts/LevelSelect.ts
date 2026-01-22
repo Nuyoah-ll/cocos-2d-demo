@@ -1,4 +1,4 @@
-import { _decorator, Node } from 'cc';
+import { _decorator, Label, Node } from 'cc';
 import { UIBase } from './UIBase';
 import { StaticSingleton } from './StaticSingleton';
 const { ccclass, property } = _decorator;
@@ -13,7 +13,14 @@ export class LevelSelect extends UIBase {
     }
 
     onBackToStartMenuButtonClick() {
-        StaticSingleton.UIManager.backToStartMenu();
+        StaticSingleton.GameManager.backToStartMenu();
+    }
+
+    updateLevelItem() {
+        this.node.children[0].children.forEach((levelItem, index) => {
+            const [levelInfoNode, isUnlockLabel] = levelItem.children;
+            isUnlockLabel.getComponent(Label).string = StaticSingleton.GameManager.maxSuccessLevel >= index + 1 ? "已解锁" : "未解锁";
+        })
     }
 }
 
