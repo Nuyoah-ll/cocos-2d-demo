@@ -1,4 +1,6 @@
 import { EventTouch, Node, Tween, tween, Vec3 } from "cc"
+import { AudioMgr } from "../../../common/AudioMgr"
+import { AudioPath } from "./Constant"
 
 export function bindTouchEvent(node: Node, handlers: {
     start?: (event: EventTouch) => any,
@@ -11,6 +13,7 @@ export function bindTouchEvent(node: Node, handlers: {
             Tween.stopAllByTarget(node)
             tween(node).to(0.1, { scale: new Vec3(0.9, 0.9, 0.9) }).start()
         }
+        AudioMgr.inst.playOneShot(AudioPath.Click)
         handlers?.start?.call(thisArg, e)
     }, thisArg)
     node.on(Node.EventType.TOUCH_MOVE, (e: EventTouch) => {
