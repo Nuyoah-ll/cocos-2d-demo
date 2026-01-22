@@ -35,7 +35,7 @@ export class GameManager extends Component {
     protected onLoad(): void {
         StaticSingleton.setGameManager(this);
         console.log("GameManager onLoad", AudioPath.BgMusic);
-        AudioMgr.inst.play(AudioPath.BgMusic);
+        AudioMgr.inst.play(AudioPath.BgMusic, { loop: true });
     }
 
     gameStart(level?: number) {
@@ -63,11 +63,13 @@ export class GameManager extends Component {
     showPassPane() {
         this.gameEnd();
         StaticSingleton.UIManager.showPassPane();
+        AudioMgr.inst.playOneShot(AudioPath.Win);
     }
 
     showFailPane() {
         this.gameEnd();
         StaticSingleton.UIManager.showFailPane();
+        AudioMgr.inst.playOneShot(AudioPath.Loss);
     }
 
     backToStartMenu() {

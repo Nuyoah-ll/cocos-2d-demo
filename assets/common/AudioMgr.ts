@@ -71,11 +71,13 @@ export class AudioMgr {
      * @param sound clip or url for the sound
      * @param volume 
      */
-    play(sound: AudioClip | string, volume: number = 1.0) {
+    play(sound: AudioClip | string, params: { volume?: number, loop?: boolean }) {
+        const { volume = 1.0, loop = false } = params;
         if (sound instanceof AudioClip) {
             this._audioSource.stop();
             this._audioSource.clip = sound;
             this._audioSource.play();
+            this._audioSource.loop = loop;
             this.audioSource.volume = volume;
         }
         else {
@@ -87,6 +89,7 @@ export class AudioMgr {
                     this._audioSource.stop();
                     this._audioSource.clip = clip;
                     this._audioSource.play();
+                    this._audioSource.loop = loop;
                     this.audioSource.volume = volume;
                 }
             });
