@@ -1,7 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 import { TiledMapManager } from './TiledMapManager';
 import levels, { ILevel } from './levels';
-import { dataManager } from './runtime/DataManager';
+import { DataManager } from './runtime/DataManager';
 import { TileManager } from './TileManager';
 const { ccclass, property } = _decorator;
 
@@ -25,9 +25,9 @@ export class BattleManager extends Component {
         const level = levels.level1;
         if (level) {
             this.level = level;
-            dataManager.mapInfo = level.mapInfo;
-            dataManager.mapRowCount = level.mapInfo.length || 0;
-            dataManager.mapColCount = level.mapInfo[0].length || 0
+            DataManager.mapInfo = level.mapInfo;
+            DataManager.mapRowCount = level.mapInfo.length || 0;
+            DataManager.mapColCount = level.mapInfo[0].length || 0
             this.generateTiledMap();
         }
     }
@@ -41,7 +41,7 @@ export class BattleManager extends Component {
     }
 
     adaptScreen() {
-        const { mapRowCount, mapColCount } = dataManager;
+        const { mapRowCount, mapColCount } = DataManager;
         const deltaX = mapRowCount * TileManager.TILE_WIDTH / 2;
         const deltaY = mapColCount * TileManager.TILE_HEIGHT / 2;
         this.stage.setPosition(-deltaX, deltaY)
