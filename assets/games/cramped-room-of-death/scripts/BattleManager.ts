@@ -3,12 +3,22 @@ import { TiledMapManager } from './TiledMapManager';
 import levels, { ILevel } from './levels';
 import { DataManager } from './runtime/DataManager';
 import { TileManager } from './TileManager';
+import { EventManager } from './runtime/EventManager';
+import { EVENT_ENUM } from './Enum';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')
 export class BattleManager extends Component {
     level: ILevel | null = null;
     stage: Node | null = null;
+
+    protected onLoad(): void {
+        EventManager.on(EVENT_ENUM.NEXT_LEVEL, this.nextLevel, this)
+    }
+
+    protected onDestroy(): void {
+        EventManager.off(EVENT_ENUM.NEXT_LEVEL, this.nextLevel, this)
+    }
 
     start() {
         this.initStage();
@@ -21,8 +31,14 @@ export class BattleManager extends Component {
         stage.setParent(this.node)
     }
 
+    clearLevel() {
+        this.stage.removeAllChildren();
+        DataManager.reset();
+    }
+
     initLevel() {
-        const level = levels.level1;
+        this.clearLevel();
+        const level = levels[`level${DataManager.levelIndex}`];
         if (level) {
             this.level = level;
             DataManager.mapInfo = level.mapInfo;
@@ -30,6 +46,11 @@ export class BattleManager extends Component {
             DataManager.mapColCount = level.mapInfo[0].length || 0
             this.generateTiledMap();
         }
+    }
+
+    nextLevel() {
+        DataManager.levelIndex++;
+        this.initLevel();
     }
 
     generateTiledMap() {

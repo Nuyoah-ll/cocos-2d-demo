@@ -52,7 +52,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 39
+      "__id__": 40
     },
     "_id": "89975d30-b62f-42c5-9409-566223f43998"
   },
@@ -75,14 +75,11 @@
         "__id__": 9
       },
       {
-        "__id__": 31
+        "__id__": 32
       }
     ],
     "_active": true,
     "_components": [
-      {
-        "__id__": 35
-      },
       {
         "__id__": 36
       },
@@ -91,6 +88,9 @@
       },
       {
         "__id__": 38
+      },
+      {
+        "__id__": 39
       }
     ],
     "_prefab": null,
@@ -394,6 +394,9 @@
       },
       {
         "__id__": 30
+      },
+      {
+        "__id__": 31
       }
     ],
     "_prefab": null,
@@ -1165,6 +1168,18 @@
     "_id": "bfGZ1NtEpDm5UZBEfFHEkO"
   },
   {
+    "__type__": "e096fIZvNtCG6awpzkwV5Fh",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 9
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_id": "4bsMFwbWRAfZjY67t3Ra3o"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "FooterLabel",
     "_objFlags": 0,
@@ -1176,13 +1191,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 32
-      },
-      {
         "__id__": 33
       },
       {
         "__id__": 34
+      },
+      {
+        "__id__": 35
       }
     ],
     "_prefab": null,
@@ -1221,14 +1236,14 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 31
+      "__id__": 32
     },
     "_enabled": true,
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 234.43308724699557,
-      "height": 50.4
+      "width": 234.39588606111738,
+      "height": 50.400000000000006
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1243,7 +1258,7 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 31
+      "__id__": 32
     },
     "_enabled": true,
     "__prefab": null,
@@ -1260,7 +1275,7 @@
     "_string": "Cramped Room of Death",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 24.703125,
+    "_actualFontSize": 20.8359375,
     "_fontSize": 20,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1305,16 +1320,16 @@
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
-      "__id__": 31
+      "__id__": 32
     },
     "_enabled": true,
     "__prefab": null,
     "_alignFlags": 44,
     "_target": null,
-    "_left": 242.78345637650222,
-    "_right": 242.78345637650222,
+    "_left": 242.8020569694413,
+    "_right": 242.8020569694413,
     "_top": 0,
-    "_bottom": 30.000000000000004,
+    "_bottom": 30,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -1412,28 +1427,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 40
-    },
-    "shadows": {
       "__id__": 41
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 42
     },
-    "fog": {
+    "_skybox": {
       "__id__": 43
     },
-    "octree": {
+    "fog": {
       "__id__": 44
     },
-    "skin": {
+    "octree": {
       "__id__": 45
     },
-    "lightProbeInfo": {
+    "skin": {
       "__id__": 46
     },
-    "postSettings": {
+    "lightProbeInfo": {
       "__id__": 47
+    },
+    "postSettings": {
+      "__id__": 48
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
