@@ -1,10 +1,11 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, UITransform } from 'cc';
 import { TiledMapManager } from './TiledMapManager';
 import levels, { ILevel } from './levels';
 import { DataManager } from './runtime/DataManager';
 import { TileManager } from './TileManager';
 import { EventManager } from './runtime/EventManager';
 import { EVENT_ENUM } from './Enum';
+import { PlayerManager } from './PlayerManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')
@@ -45,7 +46,15 @@ export class BattleManager extends Component {
             DataManager.mapRowCount = level.mapInfo.length || 0;
             DataManager.mapColCount = level.mapInfo[0].length || 0
             this.generateTiledMap();
+            this.generatePlayer();
         }
+    }
+
+    generatePlayer() {
+        const player = new Node();
+        player.setParent(this.stage);
+        const playerManager = player.addComponent(PlayerManager);
+        playerManager.init();
     }
 
     nextLevel() {

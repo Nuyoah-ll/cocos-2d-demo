@@ -18,7 +18,6 @@ export class TiledMapManager extends Component {
 
     async init() {
         const { mapInfo } = DataManager;
-        console.log(mapInfo, "mapInfo")
         const tiles = await ResourceManager.loadDir("cramped-room-of-death/texture/tile/tile")
         for (let i = 0; i < mapInfo.length; i++) {
             const column = mapInfo[i];
