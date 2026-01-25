@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 @ccclass('Player')
 export class Player extends Component {
     animation: Animation | null = null
+    direction: string = "up"
 
     protected onLoad(): void {
         console.log("出发了？")
@@ -19,84 +20,120 @@ export class Player extends Component {
                 params: ["0"]
             }
         ]
-        // 监听动画组件的动画事件
-        this.animation.on(Animation.EventType.PLAY, (type: Animation.EventType, state: AnimationState) => {
-            console.log(type, state, "???")
-        }, this)
     }
 
     onKeyPress(event: EventKeyboard) {
         console.log("按钮按下", event.keyCode)
         switch (event.keyCode) {
-            case KeyCode.ARROW_UP:
+            case KeyCode.KEY_Q:
+                this.turnLeft();
+                break;
+            case KeyCode.KEY_E:
+                this.turnRight();
+                break;
+            case KeyCode.KEY_W:
                 this.moveUp();
                 break;
-            case KeyCode.ARROW_DOWN:
+            case KeyCode.KEY_S:
                 this.moveDown();
                 break;
-            case KeyCode.ARROW_LEFT:
+            case KeyCode.KEY_A:
                 this.moveLeft();
                 break;
-            case KeyCode.ARROW_RIGHT:
+            case KeyCode.KEY_D:
                 this.moveRight();
                 break;
         }
     }
 
-    onUpClip(...args) {
-        console.log(args, "onUpClip")
+    onUpClip(){
+        
+    }
+
+    turnLeft() {
+        if (this.direction === "up") {
+            this.playAnimation("lefttoleft", () => {
+                this.playAnimation("left")
+                this.direction = "left"
+            })
+        }
+        if (this.direction === "left") {
+            this.playAnimation("lefttodown", () => {
+                this.playAnimation("down")
+                this.direction = "down"
+            })
+        }
+        if (this.direction === "down") {
+            this.playAnimation("lefttoright", () => {
+                this.playAnimation("right")
+                this.direction = "right"
+            })
+        }
+        if (this.direction === "right") {
+            this.playAnimation("lefttoup", () => {
+                this.playAnimation("up")
+                this.direction = "up"
+            })
+        }
+    }
+
+    turnRight() {
+        if (this.direction === "up") {
+            this.playAnimation("righttoright", () => {
+                this.playAnimation("right")
+                this.direction = "right"
+            })
+        }
+        if (this.direction === "right") {
+            this.playAnimation("righttodown", () => {
+                this.playAnimation("down")
+                this.direction = "down"
+            })
+        }
+        if (this.direction === "down") {
+            this.playAnimation("righttoleft", () => {
+                this.playAnimation("left")
+                this.direction = "left"
+            })
+        }
+        if (this.direction === "left") {
+            this.playAnimation("righttoup", () => {
+                this.playAnimation("up")
+                this.direction = "up"
+            })
+        }
     }
 
     moveUp() {
-        console.log("向上")
-        const move = this.playAnimation("up")
-        if (move) {
-            this.node.setPosition(this.node.x, this.node.position.y + 55)
-        }
+        this.node.setPosition(this.node.x, this.node.position.y + 55)
     }
 
     moveDown() {
-        console.log("向下")
-        const move = this.playAnimation('down')
-        if (move) {
-            this.node.setPosition(this.node.x, this.node.position.y - 55)
-        }
+        this.node.setPosition(this.node.x, this.node.position.y - 55)
     }
 
-
     moveLeft() {
-        console.log("向左")
-        const move = this.playAnimation("left")
-        if (move) {
-            this.node.setPosition(this.node.x - 55, this.node.position.y)
-        }
+        this.node.setPosition(this.node.x - 55, this.node.position.y)
     }
 
     moveRight() {
-        console.log("向右")
-        const move = this.playAnimation("right")
-        if (move) {
-            this.node.setPosition(this.node.x + 55, this.node.position.y)
-        }
+        this.node.setPosition(this.node.x + 55, this.node.position.y)
     }
 
-    playAnimation(name: string) {
+    playAnimation(name: string, func?: Function) {
+        if (func) {
+            const callback = () => {
+                func()
+                this.animation.off(Animation.EventType.FINISHED, callback, this)
+            }
+            this.animation.on(Animation.EventType.FINISHED, callback, this)
+        }
         // 获取动画的状态
         const state = this.animation.getState(name);
         if (!state.isPlaying) {
             // 通过程序控制动画的内容
             this.animation.play(name)
-            return false
         }
-        return true
-    }
-
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-
     }
 }
 

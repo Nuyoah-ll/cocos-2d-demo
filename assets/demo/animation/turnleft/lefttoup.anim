@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "up",
+    "_name": "lefttoup",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
@@ -9,9 +9,9 @@
     "_native": "",
     "sample": 60,
     "speed": 1,
-    "wrapMode": 2,
+    "wrapMode": 1,
     "enableTrsBlending": false,
-    "_duration": 0.5166666666666667,
+    "_duration": 0.35,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -70,24 +70,19 @@
     "_times": [
       0,
       0.16666666666666666,
-      0.3333333333333333,
-      0.5
+      0.3333333333333333
     ],
     "_values": [
       {
-        "__uuid__": "e266ec6f-22fc-44a7-ab34-2091dc3b96b4@695ba",
+        "__uuid__": "0e9215fb-316d-4c7a-b95a-f840280eec6d@e96a9",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "e266ec6f-22fc-44a7-ab34-2091dc3b96b4@9d41c",
+        "__uuid__": "0e9215fb-316d-4c7a-b95a-f840280eec6d@1500a",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "e266ec6f-22fc-44a7-ab34-2091dc3b96b4@95e25",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "e266ec6f-22fc-44a7-ab34-2091dc3b96b4@fc02a",
+        "__uuid__": "0e9215fb-316d-4c7a-b95a-f840280eec6d@d3e58",
         "__expectedType__": "cc.SpriteFrame"
       }
     ]
