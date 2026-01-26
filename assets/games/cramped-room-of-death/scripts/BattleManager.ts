@@ -5,7 +5,7 @@ import { DataManager } from './runtime/DataManager';
 import { TileManager } from './TileManager';
 import { EventManager } from './runtime/EventManager';
 import { EVENT_ENUM } from './Enum';
-import { PlayerManager } from './PlayerManager';
+import { PlayerManager } from './player/PlayerManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')

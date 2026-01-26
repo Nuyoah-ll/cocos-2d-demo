@@ -10,6 +10,8 @@ export class ControlManager extends Component {
         this.node.children[2].on(Node.EventType.TOUCH_END, this.moveUp, this)
         this.node.children[3].on(Node.EventType.TOUCH_END, this.moveDown, this)
         this.node.children[5].on(Node.EventType.TOUCH_END, this.moveRight, this)
+        this.node.children[0].on(Node.EventType.TOUCH_END, this.turnLeft, this)
+        this.node.children[4].on(Node.EventType.TOUCH_END, this.turnRight, this)
     }
 
     update(deltaTime: number) {
@@ -32,10 +34,12 @@ export class ControlManager extends Component {
         EventManager.emit(EVENT_ENUM.PLAYER_CTRL, CONTROLLER_ENUM.RIGHT)
     }
 
+    turnLeft() {
+        EventManager.emit(EVENT_ENUM.PLAYER_CTRL, CONTROLLER_ENUM.TURNLEFT)
+    }
 
-    // todo 临时
-    handleControl() {
-        EventManager.emit(EVENT_ENUM.NEXT_LEVEL)
+    turnRight() {
+        EventManager.emit(EVENT_ENUM.PLAYER_CTRL, CONTROLLER_ENUM.TURNRIGHT)
     }
 }
 
