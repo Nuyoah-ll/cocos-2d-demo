@@ -21,6 +21,9 @@ export class Status {
     this.fsm.waitingList.push(promise);
     // 加载朝上的四个动画帧，作为角色的默认动作
     const topSpriteFrameList = await promise
+    // loadDir返回的不一定是按照文件顺序，所以这里按动画帧图片名称数字升序排列
+    topSpriteFrameList.sort((a, b) => Number(a.name.match(/\d+/g)[0]) - Number(b.name.match(/\d+/g)[0]));
+    console.log("加载了帧图片:", topSpriteFrameList.map(item => item.name))
     // 创建AnimationClip
     this.animationClip = new AnimationClip();
     // 动画持续时间4*1/8
